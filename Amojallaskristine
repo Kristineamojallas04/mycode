@@ -1,0 +1,136 @@
+#include <iostream>
+#include <string>
+#include <dos.h>
+#include <direct.h> 
+
+using namespace std;
+
+void list_all_files() {
+    system("dir");
+}
+
+void list_files_by_extension(const string& ext) {
+    system(("dir *." + ext).c_str());
+}
+
+void list_files_by_pattern(const string& pattern) {
+    system(("dir " + pattern).c_str());
+}
+
+void create_new_directory() {
+    string dir_name;
+    cout << "Enter directory name: ";
+    getline(cin, dir_name);
+
+    if (_mkdir(dir_name.c_str()) == 0) {
+        cout << "Directory created successfully: " << dir_name << endl;
+    } else {
+        cout << "Error creating directory: " << dir_name << endl;
+    }
+}
+
+void navigate_directory() {
+    int option;
+    cout << "Directory Navigation Menu:" << endl;
+    cout << "1. Move to parent directory." << endl;
+    cout << "2. Move to root directory." << endl;
+    cout << "3. Move to a specific directory." << endl;
+    cout << "Select an option: ";
+    cin >> option;
+    cin.ignore();  // Clear the newline character from the input buffer
+
+    switch (option) {
+        case 1:
+            system("cd ..");
+            cout << "Moved to the parent directory." << endl;
+            break;
+        case 2:
+            system("cd \\");
+            cout << "Moved to the root directory." << endl;
+            break;
+        case 3: {
+            string dir_path;
+            cout << "Enter directory path: ";
+            getline(cin, dir_path);
+
+            if (_chdir(dir_path.c_str()) == 0) {
+                cout << "Successfully moved to: " << dir_path << endl;
+            } else {
+                cout << "Error moving to: " << dir_path << endl;
+            }
+            break;
+        }
+        default:
+            cout << "Invalid option! Please try again." << endl;
+            break;
+    }
+}
+
+void file_operations_menu() {
+    int file_option;
+    cout << "\nFile Operations Menu:" << endl;
+    cout << "1. List all files in the current directory" << endl;
+    cout << "2. List files by specific extension (e.g., .txt)" << endl;
+    cout << "3. List files by pattern (e.g., moha*.*)" << endl;
+    cout << "Select an option: ";
+    cin >> file_option;
+    cin.ignore();  // Clear the newline character from the input buffer
+
+    switch (file_option) {
+        case 1:
+            list_all_files();
+            break;
+        case 2: {
+            string ext;
+            cout << "Enter the file extension (e.g., txt): ";
+            getline(cin, ext);
+            list_files_by_extension(ext);
+            break;
+        }
+        case 3: {
+            string pattern;
+            cout << "Enter the pattern (e.g., moha*.*): ";
+            getline(cin, pattern);
+            list_files_by_pattern(pattern);
+            break;
+        }
+        default:
+            cout << "Invalid option! Please try again." << endl;
+            break;
+    }
+}
+
+int main() {
+    int main_option;
+
+    do {
+        cout << "\nMain Menu:" << endl;
+        cout << "1. File Operations" << endl;
+        cout << "2. Create a new directory" << endl;
+        cout << "3. Change directory" << endl;
+        cout << "4. Exit the program" << endl;
+        cout << "Select an option: ";
+        cin >> main_option;
+        cin.ignore();  // Clear the newline character from the input buffer
+
+        switch (main_option) {
+            case 1:
+                file_operations_menu();
+                break;
+            case 2:
+                create_new_directory();
+                break;
+            case 3:
+                navigate_directory();
+                break;
+            case 4:
+                cout << "Exiting the program." << endl;
+                break;
+            default:
+                cout << "Invalid option! Please try again." << endl;
+                break;
+        }
+    } while (main_option != 4);
+
+    return 0;
+}
