@@ -1,0 +1,131 @@
+#include <iostream>
+#include <string>
+#include <direct.h>
+#include <dos.h>
+
+using namespace std;
+
+void list_files() {
+    system("dir");
+}
+
+void list_files_extension(string ext) {
+    system(("dir *." + ext);
+}
+
+void list_files_pattern(string pattern) {
+    system(("dir " + pattern);
+}
+
+void create_directory() {
+    string dir_name;
+    cout << "Enter directory name: ";
+    getline(cin, dir_name);
+    if (_mkdir(dir_name.c_str()) == 0) {
+=        cout << "Directory created successfully: " << dir_name << endl;
+    } else {
+        cout << "Error creating directory: " << dir_name << endl;
+    }
+}
+
+void change_directory() {
+    int choice;
+    cout << "Enter your choice:" << endl;
+    cout << "1. Move one step back (to the parent directory)." << endl;
+    cout << "2. Move to the root directory." << endl;
+    cout << "3. Move to a specific directory." << endl;
+    cin >> choice;
+    cin.ignore();  // to clear the newline character from the input buffer
+
+    switch (choice) {
+        case 1:
+            system("cd ..");
+            cout << "Moved one step back." << endl;
+            break;
+        case 2:
+            system("cd \\");
+            cout << "Moved to the root directory." << endl;
+            break;
+        case 3: {
+            string dir_path;
+            cout << "Enter directory path: ";
+            getline(cin, dir_path);
+            if (_chdir(dir_path.c_str()) == 0) {
+                cout << "Directory changed successfully to: " << dir_path << endl;
+            } else {
+                cout << "Error changing directory to: " << dir_path << endl;
+            }
+            break;
+        }
+        default:
+            cout << "Invalid choice!" << endl;
+            break;
+    }
+}
+
+int main() {
+    int choice;
+
+    do {
+        cout << "\nMain Menu:" << endl;
+        cout << "1. List files in the current directory" << endl;
+        cout << "2. Create a new directory" << endl;
+        cout << "3. Change the working directory" << endl;
+        cout << "4. Exit the program" << endl;
+        cout << "Select an option: ";
+        cin >> choice;
+        cin.ignore();  // to clear the newline character from the input buffer
+
+        switch (choice) {
+            case 1: {
+                int list_choice;
+                cout << "\nList Files Menu:" << endl;
+                cout << "1. List all files in the current directory" << endl;
+                cout << "2. List files based on a specific extension (e.g., .txt)" << endl;
+                cout << "3. List files based on a pattern (e.g., moha*.*)" << endl;
+                cout << "Select an option: ";
+                cin >> list_choice;
+                cin.ignore();  // to clear the newline character from the input buffer
+
+                switch (list_choice) {
+                    case 1:
+                        list_files();
+                        break;
+                    case 2: {
+                        string ext;
+                        cout << "Enter the file extension (e.g., txt): ";
+                        getline(cin, ext);
+                        list_files_extension(ext);
+                        break;
+                    }
+                    case 3: {
+                        string pattern;
+                        cout << "Enter the pattern (e.g., moha*.*): ";
+                        getline(cin, pattern);
+                        list_files_pattern(pattern);
+                        break;
+                    }
+                    default:
+                        cout << "Invalid option!" << endl;
+                        break;
+                }
+                break;
+            }
+            case 2:
+                create_directory();
+                break;
+            case 3:
+                change_directory();
+                break;
+            case 4:
+                cout << "Exiting the program." << endl;
+                break;
+            default:
+                cout << "Invalid option! Please try again." << endl;
+                break;
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+    
